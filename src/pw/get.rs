@@ -29,16 +29,14 @@ pub async fn get(args: GetArgs) -> io::Result<()> {
         }
     });
 
-    let socket = UdpSocket::bind("127.0.0.1:0").expect("bind to address");
-    socket
-        .send_to(
-            req.to_string().as_bytes(),
-            format!("127.0.0.1:{}", args.port),
-        )
-        .expect("send request to socket");
+    let socket = UdpSocket::bind("127.0.0.1:0")?;
+    socket.send_to(
+        req.to_string().as_bytes(),
+        format!("127.0.0.1:{}", args.port),
+    )?;
 
     let mut buf = [0; 65536];
-    let (len, _) = socket.recv_from(&mut buf).expect("receive data");
+    let (len, _) = socket.recv_from(&mut buf)?;
     let res = serde_json::from_slice::<GetLoginPasswordForURLRes>(&buf[..len]).unwrap();
 
     println!("{}", json!(res.payload.smsg.sdata));

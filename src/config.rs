@@ -40,7 +40,7 @@ impl PassConfig {
     pub fn load() -> io::Result<Self> {
         #[allow(deprecated)]
         let path = home_dir().unwrap().join(".ipass/config.json");
-        let content = std::fs::read_to_string(path).expect("read config file");
+        let content = std::fs::read_to_string(path)?;
         let config: Self =
             serde_json::from_str(&content).expect("parse config file in JSON format");
         if config.shared_key.is_empty() {

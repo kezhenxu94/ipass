@@ -52,7 +52,7 @@ pub async fn get(args: OtpArgs) -> io::Result<()> {
         );
     }
 
-    let res = serde_json::from_slice::<GetOTPForURLRes>(&buf[..len]).unwrap();
+    let res = serde_json::from_slice::<GetOTPForURLRes>(&buf[..len])?;
 
     println!("{}", json!(res.payload.smsg.sdata));
 

@@ -65,7 +65,7 @@ pub async fn auth(args: AuthArgs) -> io::Result<()> {
 
     let server_pub_key = BASE64_STANDARD.decode(res.payload.pake.b).unwrap();
     let salt = BASE64_STANDARD.decode(res.payload.pake.s).unwrap();
-    let password = rpassword::prompt_password("Enter PIN: ").unwrap();
+    let password = rpassword::prompt_password("Enter PIN: ")?;
     let new_key = srp::pre_master_secret(
         &pub_key.1,
         &pkey,
@@ -102,7 +102,7 @@ pub async fn auth(args: AuthArgs) -> io::Result<()> {
         )
         .await?;
     let (len, _) = socket.recv_from(&mut buf).await?;
-    let res = serde_json::from_slice::<Response<VerifyMsg>>(&buf[..len]).unwrap();
+    let res = serde_json::from_slice::<Response<VerifyMsg>>(&buf[..len])?;
 
     if res.payload.pake.tid != username_b64 {
         return Err(io::Error::new(

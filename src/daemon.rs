@@ -46,13 +46,12 @@ pub async fn start(args: StartArgs) -> io::Result<()> {
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
-        .spawn()
-        .expect("Failed to run command");
+        .spawn()?;
     let stdin = pm_process.stdin.as_mut().expect("get pm process stdin");
     let stdout = pm_process.stdout.as_mut().expect("get pm process stdout");
 
     let socket = UdpSocket::bind(format!("127.0.0.1:{}", args.port)).await?;
-    let port = socket.local_addr().unwrap().port();
+    let port = socket.local_addr()?.port();
     info!("Daemon is listening on port: {}", port);
 
     let mut buf = [0; 4096];
@@ -67,13 +66,11 @@ pub async fn start(args: StartArgs) -> io::Result<()> {
                 let (len, addr) = result?;
 
                 buf[..4].copy_from_slice(&(len as u32).to_le_bytes());
-                stdin.write_all(&buf[..len + 4]).expect("write message");
+                stdin.write_all(&buf[..len + 4])?;
 
-                stdout
-                    .read_exact(&mut buf[..4])
-                    .expect("read message length");
+                stdout.read_exact(&mut buf[..4])?;
                 let len = u32::from_le_bytes(buf[..4].try_into().unwrap()) as usize;
-                stdout.read_exact(&mut buf[4..len + 4]).unwrap();
+                stdout.read_exact(&mut buf[4..len + 4])?;
 
                 socket.send_to(&buf[4..len + 4], addr).await?;
             }
