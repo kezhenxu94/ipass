@@ -33,6 +33,19 @@ Then extract the binary from the tarball:
 tar -zxvf ./ipass-aarch64-apple-darwin.tar.gz
 ```
 
+### Brew
+
+```shell
+brew install io41/tap/ipass
+```
+
+If you want the ipass daemon to run at login:
+
+```shell
+tap homebrew/services
+brew services start ipass
+```
+
 ### Cargo
 
 If you have `cargo` installed, you can easily install the binary using the
