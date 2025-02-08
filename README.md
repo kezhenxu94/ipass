@@ -36,7 +36,7 @@ tar -zxvf ./ipass-aarch64-apple-darwin.tar.gz
 ### Brew
 
 ```shell
-brew install io41/tap/ipass
+brew install kezhenxu94/tap/ipass
 ```
 
 If you want the ipass daemon to run at login:
