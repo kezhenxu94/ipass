@@ -35,6 +35,8 @@ tar -zxvf ./ipass-aarch64-apple-darwin.tar.gz
 
 ### Brew
 
+Thanks to @io41 for the tap!
+
 ```shell
 brew install kezhenxu94/tap/ipass
 ```
