@@ -11,6 +11,16 @@ Some sample usages of the `ipass` CLI tool you might be interested in:
 ```shell
 # login to docker hub
 ipass pw get docker.com kezhenxu94 | jq '.entries[0].password' -r | docker login -u kezhenxu94 --password-stdin
+
+# Upload files/folders to SVN
+svn \
+  --non-interactive \
+  --no-auth-cache \
+  --username kezhenxu94 \
+  --password $(ipass pw get id.apache.org kezhenxu94 | jq '.entries[0].password' -r) \
+  import -m "Draft Apache SkyWalking Eyes release $VERSION" \
+  $VERSION \
+  https://dist.apache.org/repos/dist/dev/skywalking/eyes/$VERSION
 ```
 
 ## About The Project
