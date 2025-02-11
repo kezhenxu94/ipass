@@ -79,6 +79,21 @@ pub struct InstallArgs {
     #[arg(long, default_value_t = true)]
     user: bool,
 }
+
+#[derive(Args, Debug, Clone)]
+pub struct SaveArgs {
+    /// Port to connect to
+    #[arg(long, default_value_t = DEFAULT_PORT)]
+    port: u16,
+    /// Website url to save password for
+    #[arg()]
+    url: String,
+    /// User name to save password for
+    username: String,
+    /// Password to save
+    password: String,
+}
+
 #[derive(Subcommand, Debug, Clone)]
 enum Commands {
     /// Start the server daemon
@@ -105,6 +120,8 @@ enum PasswordCommands {
     List(ListArgs),
     /// Get password by domain and username
     Get(GetArgs),
+    /// Save password by domain and username
+    Save(SaveArgs),
 }
 
 #[tokio::main]
@@ -123,6 +140,7 @@ async fn main() -> io::Result<()> {
         Commands::Pw(commands) => match commands {
             PasswordCommands::List(args) => pw::list(args).await,
             PasswordCommands::Get(args) => pw::get(args).await,
+            PasswordCommands::Save(args) => pw::save(args).await,
         },
         Commands::Otp(commands) => match commands {
             OtpCommands::Get(args) => otp::get(args).await,

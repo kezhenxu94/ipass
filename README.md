@@ -31,6 +31,13 @@ because the `apw` project doesn't run on my M3 macOS 15.0.1 for no reason.
 It utilises a built in helper tool in macOS 14 and above to facilitate this
 functionality.
 
+## Features
+
+- [x] List passwords
+- [x] Get password
+- [x] Get OTP (one-time password)
+- [x] Save/Update password
+
 ## Installation
 
 ### Binary

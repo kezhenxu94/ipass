@@ -9,6 +9,8 @@ pub enum Cmd {
     HandShake = 2,
     GetLoginNamesForURL = 4,
     GetPasswordForLoginName = 5,
+    NewAccount4URL = 6,
+    SaveStage1LoginName = 7,
     DidFillOneTimeCode = 17,
 }
 
@@ -16,6 +18,7 @@ pub enum Cmd {
 #[derive(Debug, Serialize_repr, Deserialize_repr, PartialEq)]
 pub enum Action {
     Search = 2,
+    MaybeAdd = 4,
     GhostSearch = 5,
 }
 
@@ -317,4 +320,100 @@ mod crypto {
         let de: DE = serde_json::from_slice(&decrypted).unwrap();
         Ok(de)
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaveStage1Data {
+    #[serde(rename = "ACT")]
+    pub act: Action,
+    #[serde(rename = "URL")]
+    pub url: String,
+    #[serde(rename = "USR")]
+    pub username: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaveStage1Req {
+    pub cmd: Cmd,
+    #[serde(rename = "tabId")]
+    pub tab_id: i32,
+    #[serde(rename = "frameId")]
+    pub frame_id: i32,
+    pub payload: SaveStage1Payload,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaveStage1Payload {
+    #[serde(rename = "QID")]
+    pub qid: String,
+    #[serde(rename = "SMSG")]
+    pub smsg: SMSGReq<SaveStage1Data>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaveStage1Res {
+    pub cmd: Cmd,
+    pub payload: SaveStage1ResPayload,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaveStage1ResPayload {
+    #[serde(rename = "SMSG")]
+    pub smsg: SMSGRes<SaveStage1ResData>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaveStage1ResData {
+    #[serde(rename = "STATUS")]
+    pub status: i32,
+    #[serde(rename = "RequiresUserAuthenticationToFill")]
+    pub requires_user_authentication_to_fill: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavePasswordReq {
+    pub cmd: Cmd,
+    #[serde(rename = "tabId")]
+    pub tab_id: i32,
+    #[serde(rename = "frameId")]
+    pub frame_id: i32,
+    pub payload: SavePasswordPayload,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavePasswordPayload {
+    #[serde(rename = "QID")]
+    pub qid: String,
+    #[serde(rename = "SMSG")]
+    pub smsg: SMSGReq<SavePasswordData>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavePasswordData {
+    #[serde(rename = "ACT")]
+    pub act: Action,
+    #[serde(rename = "URL")]
+    pub url: String,
+    #[serde(rename = "USR")]
+    pub usr: String,
+    #[serde(rename = "PWD")]
+    pub pwd: String,
+    #[serde(rename = "NURL")]
+    pub nurl: String,
+    #[serde(rename = "NUSR")]
+    pub nusr: String,
+    #[serde(rename = "NPWD")]
+    pub npwd: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavePasswordRes {
+    pub cmd: Cmd,
+    pub payload: SavePasswordResPayload,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavePasswordResPayload {
+    #[serde(rename = "SMSG")]
+    pub smsg: SMSGRes<String>,
 }
