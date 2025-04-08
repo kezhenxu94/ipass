@@ -16,7 +16,7 @@ serde = { version = "1.0.214", features = ["derive"] }
 serde_json = "1.0.132"
 serde_repr = "0.1.19"
 sha2 = "0.10.8"
-tokio = { version = "1.41.1", features = ["full"] }
+tokio = { version = "1.43.1", features = ["full"] }
 log = "0.4.22"
 env_logger = "0.11.5"
 clap-verbosity-flag = "2.2.2"
